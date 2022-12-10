@@ -3,7 +3,6 @@ const { remove } = require("../models/studentModel")
 
 const Student = require("../models/studentModel")
 
-// @desc GET STUDENTS
 // @route GET /api/students
 const getStudents = asyncHandler(async (req, res) => {
     const students = await Student.find()
@@ -11,23 +10,36 @@ const getStudents = asyncHandler(async (req, res) => {
     res.status(200).json(students)
 })
 
-// @desc POST STUDENTS
-// @route POST /api/students
+// POST /api/students
 const setStudent = asyncHandler(async (req, res) => {
-    if (!req.body.text) {
+    if (!req.body) {
         res.status(400)
         throw new Error("Please add a text field")
     }
 
     const student = await Student.create({
-        text: req.body.text,
+        name: req.body.name,
+        father: req.body.father,
+        mother: req.body.mother,
+        class: req.body.class,
     })
 
     res.status(200).json(student)
 })
 
-// @desc UPDATE STUDENTS
-// @route PUT /api/students/:id
+// Get /api/students/:id
+const getOneStudent = asyncHandler(async (req, res) => {
+    const student = await Student.findById(req.params.id)
+
+    if(!student) {
+        res.status(400)
+        throw new Error("Student not found")
+    }
+
+    res.status(200).json(student)
+})
+
+// PUT /api/students/:id
 const updateStudent = asyncHandler(async (req, res) => {
     const student = await Student.findById(req.params.id)
 
@@ -43,8 +55,7 @@ const updateStudent = asyncHandler(async (req, res) => {
     res.status(200).json(updatedStudent)
 })
 
-// @desc DELETE STUDENTS
-// @route DELETE /api/students/:id
+// DELETE /api/students/:id
 const deleteStudent = asyncHandler(async (req, res) => {
     const student = await Student.findById(req.params.id)
 
@@ -61,6 +72,7 @@ const deleteStudent = asyncHandler(async (req, res) => {
 module.exports = {
     getStudents,
     setStudent,
+    getOneStudent,
     updateStudent,
     deleteStudent,
 }

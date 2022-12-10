@@ -2,13 +2,22 @@ const mongoose = require("mongoose")
 
 const studentSchema = mongoose.Schema(
     {
-        text: {
+        name: {
             type: String,
             required: [true, "Please add a text value"],
         },
-    },
-    {
-        timestamps: true,
+        father: {
+            type: String,
+            required: [true, "Please add a text value"],
+        },
+        mother: {
+            type: String,
+            required: [true, "Please add a text value"],
+        },
+        class: {
+            type: String,
+            required: [true, "Please add a text value"],
+        },
     }
 )
 
