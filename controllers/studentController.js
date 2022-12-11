@@ -39,6 +39,25 @@ const getOneStudent = asyncHandler(async (req, res) => {
     res.status(200).json(student)
 })
 
+// Get /api/students/search/:key
+const searchStudents = asyncHandler(async (req, res) => {
+    const search = req.params.key
+    const students = await Student.find({
+        $or: [
+            {_id: search},
+            {name: {$regex: search, $options: "i"}},
+            {father: {$regex: search, $options: "i"}},
+            {mother: {$regex: search, $options: "i"}},
+            {class: {$regex: search, $options: "i"}},
+        ]
+    })
+    if(!students) {
+        res.status(400)
+        throw new Error("No students found with that search term")
+    }
+    res.status(200).json(students)
+})
+
 // PUT /api/students/:id
 const updateStudent = asyncHandler(async (req, res) => {
     const student = await Student.findById(req.params.id)
@@ -73,6 +92,7 @@ module.exports = {
     getStudents,
     setStudent,
     getOneStudent,
+    searchStudents,
     updateStudent,
     deleteStudent,
 }
